@@ -80,6 +80,13 @@ class UbusClient(
         """Get optional xDSL metrics through the native ubus API."""
         try:
             raw = await self._call("dsl", "metrics")
+        except UbusPermissionError as err:
+            _LOGGER.debug(
+                "Native xDSL ubus access is denied on %s; trying the legacy file.exec path: %s",
+                self.host,
+                err,
+            )
+            return await super().get_dsl_metrics()
         except Exception as err:  # noqa: BLE001
             _LOGGER.debug("xDSL metrics are unavailable on %s: %s", self.host, err)
             return DslMetrics()
