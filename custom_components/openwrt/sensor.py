@@ -1105,16 +1105,37 @@ class OpenWrtSnortSensor(CoordinatorEntity[OpenWrtDataCoordinator], SensorEntity
         return attrs
 
 
+def _dsl_raw_value(data: OpenWrtData, *path: str) -> int | float | None:
+    """Return a numeric metric from the optional raw xDSL response."""
+    value: Any = data.dsl.raw
+    for key in path:
+        if not isinstance(value, dict):
+            return None
+        value = value.get(key)
+    return value if isinstance(value, (int, float)) else None
+
+
+def _dsl_rate_value(data: OpenWrtData, direction: str, key: str) -> float | None:
+    """Return a xDSL bitrate in Mbit/s."""
+    value = _dsl_raw_value(data, direction, key)
+    return value / 1_000_000 if value is not None else None
+
+
 def _get_dsl_sensors() -> list[OpenWrtSensorDescription]:
     """Return sensors for routers exposing the optional xDSL ubus object."""
-    return [
+
+    def available(data: OpenWrtData) -> bool:
+        """Return whether the router reported xDSL metrics."""
+        return data.dsl.available
+
+    sensors = [
         OpenWrtSensorDescription(
             key="dsl_downstream_sync",
             name="xDSL Downstream Sync",
             native_unit_of_measurement="Mbit/s",
             state_class=SensorStateClass.MEASUREMENT,
             value_fn=lambda data: data.dsl.downstream_data_rate / 1_000_000,
-            available_fn=lambda data: data.dsl.available,
+            available_fn=available,
         ),
         OpenWrtSensorDescription(
             key="dsl_upstream_sync",
@@ -1122,7 +1143,7 @@ def _get_dsl_sensors() -> list[OpenWrtSensorDescription]:
             native_unit_of_measurement="Mbit/s",
             state_class=SensorStateClass.MEASUREMENT,
             value_fn=lambda data: data.dsl.upstream_data_rate / 1_000_000,
-            available_fn=lambda data: data.dsl.available,
+            available_fn=available,
         ),
         OpenWrtSensorDescription(
             key="dsl_downstream_snr",
@@ -1130,7 +1151,7 @@ def _get_dsl_sensors() -> list[OpenWrtSensorDescription]:
             native_unit_of_measurement="dB",
             state_class=SensorStateClass.MEASUREMENT,
             value_fn=lambda data: data.dsl.downstream_snr,
-            available_fn=lambda data: data.dsl.available,
+            available_fn=available,
         ),
         OpenWrtSensorDescription(
             key="dsl_upstream_snr",
@@ -1138,17 +1159,107 @@ def _get_dsl_sensors() -> list[OpenWrtSensorDescription]:
             native_unit_of_measurement="dB",
             state_class=SensorStateClass.MEASUREMENT,
             value_fn=lambda data: data.dsl.upstream_snr,
-            available_fn=lambda data: data.dsl.available,
+            available_fn=available,
         ),
+    ]
+    for direction, label in (("downstream", "Downstream"), ("upstream", "Upstream")):
+        sensors.extend(
+            [
+                OpenWrtSensorDescription(
+                    key=f"dsl_{direction}_attainable",
+                    name=f"xDSL {label} Attainable Rate",
+                    native_unit_of_measurement="Mbit/s",
+                    state_class=SensorStateClass.MEASUREMENT,
+                    value_fn=lambda data, d=direction: _dsl_rate_value(
+                        data, d, "attndr"
+                    ),
+                    available_fn=available,
+                ),
+                OpenWrtSensorDescription(
+                    key=f"dsl_{direction}_line_attenuation",
+                    name=f"xDSL {label} Line Attenuation",
+                    native_unit_of_measurement="dB",
+                    state_class=SensorStateClass.MEASUREMENT,
+                    value_fn=lambda data, d=direction: _dsl_raw_value(data, d, "latn"),
+                    available_fn=available,
+                ),
+                OpenWrtSensorDescription(
+                    key=f"dsl_{direction}_signal_attenuation",
+                    name=f"xDSL {label} Signal Attenuation",
+                    native_unit_of_measurement="dB",
+                    state_class=SensorStateClass.MEASUREMENT,
+                    value_fn=lambda data, d=direction: _dsl_raw_value(data, d, "satn"),
+                    available_fn=available,
+                ),
+                OpenWrtSensorDescription(
+                    key=f"dsl_{direction}_inp",
+                    name=f"xDSL {label} INP",
+                    state_class=SensorStateClass.MEASUREMENT,
+                    value_fn=lambda data, d=direction: _dsl_raw_value(data, d, "inp"),
+                    available_fn=available,
+                ),
+                OpenWrtSensorDescription(
+                    key=f"dsl_{direction}_interleave_delay",
+                    name=f"xDSL {label} Interleave Delay",
+                    native_unit_of_measurement="ms",
+                    state_class=SensorStateClass.MEASUREMENT,
+                    value_fn=lambda data, d=direction: _dsl_raw_value(
+                        data, d, "interleave_delay"
+                    ),
+                    available_fn=available,
+                ),
+                OpenWrtSensorDescription(
+                    key=f"dsl_{direction}_transmit_power",
+                    name=f"xDSL {label} Transmit Power",
+                    native_unit_of_measurement="dBm",
+                    state_class=SensorStateClass.MEASUREMENT,
+                    value_fn=lambda data, d=direction: _dsl_raw_value(
+                        data, d, "actatp"
+                    ),
+                    available_fn=available,
+                ),
+                OpenWrtSensorDescription(
+                    key=f"dsl_{direction}_minimum_throughput",
+                    name=f"xDSL {label} Minimum Throughput",
+                    native_unit_of_measurement="Mbit/s",
+                    state_class=SensorStateClass.MEASUREMENT,
+                    value_fn=lambda data, d=direction: _dsl_rate_value(
+                        data, d, "mineftr"
+                    ),
+                    available_fn=available,
+                ),
+            ]
+        )
+    for end, label in (("near", "Near-End"), ("far", "Far-End")):
+        for source_key, name, entity_key in (
+            ("es", "Error Seconds", "error_seconds"),
+            ("ses", "Severely Errored Seconds", "severely_errored_seconds"),
+            ("fec_c", "FEC", "fec"),
+            ("cv_c", "Code Violations", "code_violations"),
+        ):
+            sensors.append(
+                OpenWrtSensorDescription(
+                    key=f"dsl_{end}_end_{entity_key}",
+                    name=f"xDSL {label} {name}",
+                    entity_category=EntityCategory.DIAGNOSTIC,
+                    state_class=SensorStateClass.TOTAL_INCREASING,
+                    value_fn=lambda data, e=end, k=source_key: _dsl_raw_value(
+                        data, "errors", e, k
+                    ),
+                    available_fn=available,
+                )
+            )
+    sensors.append(
         OpenWrtSensorDescription(
             key="dsl_diagnostics",
             name="xDSL Diagnostics",
             entity_category=EntityCategory.DIAGNOSTIC,
             value_fn=lambda data: data.dsl.state,
             attrs_fn=lambda data: data.dsl.raw,
-            available_fn=lambda data: data.dsl.available,
-        ),
-    ]
+            available_fn=available,
+        )
+    )
+    return sensors
 
 
 async def async_setup_entry(

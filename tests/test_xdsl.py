@@ -73,3 +73,47 @@ def test_dsl_sensors_expose_core_values_and_complete_raw_metrics() -> None:
     assert sync.value_fn(data) == 116.79
     assert diagnostics.value_fn(data) == "Showtime with TC-Layer sync"
     assert diagnostics.attrs_fn(data) == {"vendor_extension": {"preserved": True}}
+
+
+def test_dsl_sensors_expose_line_quality_and_error_counters() -> None:
+    """xDSL trend sensors cover attainable rates, quality and errors."""
+    data = OpenWrtData(
+        dsl=DslMetrics(
+            available=True,
+            raw={
+                "downstream": {
+                    "attndr": 141_952_288,
+                    "latn": 10.6,
+                    "satn": 10.6,
+                    "inp": 69,
+                    "interleave_delay": 160,
+                    "actatp": 14.5,
+                    "mineftr": 100_728_000,
+                },
+                "upstream": {
+                    "attndr": 42_585_000,
+                    "latn": 7.9,
+                    "satn": 7.6,
+                    "inp": 45,
+                    "interleave_delay": 0,
+                    "actatp": -3.3,
+                    "mineftr": 42_127_000,
+                },
+                "errors": {
+                    "near": {"es": 2, "ses": 1, "fec_c": 4490, "cv_c": 15},
+                    "far": {"es": 135, "ses": 50, "fec_c": 33503, "cv_c": 406},
+                },
+            },
+        )
+    )
+
+    descriptions = {item.key: item for item in _get_dsl_sensors()}
+
+    assert descriptions["dsl_downstream_attainable"].value_fn(data) == 141.952288
+    assert descriptions["dsl_upstream_line_attenuation"].value_fn(data) == 7.9
+    assert descriptions["dsl_downstream_inp"].value_fn(data) == 69
+    assert descriptions["dsl_upstream_interleave_delay"].value_fn(data) == 0
+    assert descriptions["dsl_downstream_minimum_throughput"].value_fn(data) == 100.728
+    assert descriptions["dsl_near_end_fec"].value_fn(data) == 4490
+    assert descriptions["dsl_far_end_error_seconds"].value_fn(data) == 135
+    assert descriptions["dsl_far_end_code_violations"].value_fn(data) == 406
