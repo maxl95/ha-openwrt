@@ -1105,6 +1105,52 @@ class OpenWrtSnortSensor(CoordinatorEntity[OpenWrtDataCoordinator], SensorEntity
         return attrs
 
 
+def _get_dsl_sensors() -> list[OpenWrtSensorDescription]:
+    """Return sensors for routers exposing the optional xDSL ubus object."""
+    return [
+        OpenWrtSensorDescription(
+            key="dsl_downstream_sync",
+            name="xDSL Downstream Sync",
+            native_unit_of_measurement="Mbit/s",
+            state_class=SensorStateClass.MEASUREMENT,
+            value_fn=lambda data: data.dsl.downstream_data_rate / 1_000_000,
+            available_fn=lambda data: data.dsl.available,
+        ),
+        OpenWrtSensorDescription(
+            key="dsl_upstream_sync",
+            name="xDSL Upstream Sync",
+            native_unit_of_measurement="Mbit/s",
+            state_class=SensorStateClass.MEASUREMENT,
+            value_fn=lambda data: data.dsl.upstream_data_rate / 1_000_000,
+            available_fn=lambda data: data.dsl.available,
+        ),
+        OpenWrtSensorDescription(
+            key="dsl_downstream_snr",
+            name="xDSL Downstream SNR",
+            native_unit_of_measurement="dB",
+            state_class=SensorStateClass.MEASUREMENT,
+            value_fn=lambda data: data.dsl.downstream_snr,
+            available_fn=lambda data: data.dsl.available,
+        ),
+        OpenWrtSensorDescription(
+            key="dsl_upstream_snr",
+            name="xDSL Upstream SNR",
+            native_unit_of_measurement="dB",
+            state_class=SensorStateClass.MEASUREMENT,
+            value_fn=lambda data: data.dsl.upstream_snr,
+            available_fn=lambda data: data.dsl.available,
+        ),
+        OpenWrtSensorDescription(
+            key="dsl_diagnostics",
+            name="xDSL Diagnostics",
+            entity_category=EntityCategory.DIAGNOSTIC,
+            value_fn=lambda data: data.dsl.state,
+            attrs_fn=lambda data: data.dsl.raw,
+            available_fn=lambda data: data.dsl.available,
+        ),
+    ]
+
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: ConfigEntry,
@@ -1163,6 +1209,13 @@ async def async_setup_entry(
 
         # Network Sensors
         _async_setup_network_sensors(coordinator, entry, new_entities, tracked_keys)
+
+        # Optional xDSL Sensors
+        if coordinator.data.dsl.available:
+            new_entities.extend(
+                OpenWrtSensorEntity(coordinator, entry, description)
+                for description in _get_dsl_sensors()
+            )
 
         # Specialized Sensors
         _async_setup_specialized_sensors(

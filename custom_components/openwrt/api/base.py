@@ -68,7 +68,7 @@ echo "LOG: TRACE: Password set"
 
 ACL_FILE="/usr/share/rpcd/acl.d/homeassistant.json"
 mkdir -p "$(dirname "$ACL_FILE")"
-printf '{{\\n  "homeassistant": {{\\n    "description": "Home Assistant Integration",\\n    "read": {{\\n      "ubus": {{\\n        "system": ["info", "board", "logread", "upgrade"],\\n        "log": ["read"],\\n        "network": ["*"],\\n        "network.*": ["*"],\\n        "iwinfo": ["*"],\\n        "file": ["*"],\\n        "firewall": ["*"],\\n        "rc": ["*"],\\n        "service": ["*"],\\n        "system": ["*"],\\n        "uci": ["*"],\\n        "session": ["*"],\\n        "hostapd.*": ["*"],\\n        "luci": ["*"],\\n        "luci-rpc": ["*"],\\n        "attendedsysupgrade": ["*"]\\n      }},\\n      "uci": ["*"],\\n      "file": {{\\n        "/etc/config/*": ["read", "stat"],\\n        "/etc/passwd": ["read"],\\n        "/etc/group": ["read"],\\n        "/etc/shadow": ["read"],\\n        "/etc/shells": ["read"],\\n        "/usr/bin/iwinfo": ["read", "stat", "exec"],\\n        "/usr/bin/etherwake": ["read", "stat", "exec"],\\n        "/usr/bin/wg": ["read", "stat", "exec"],\\n        "/usr/sbin/openvpn": ["read", "stat", "exec"],\\n        "/usr/bin/id": ["read", "stat", "exec"],\\n        "/bin/sh": ["read", "stat", "exec"],\\n        "/bin/ash": ["read", "stat", "exec"],\\n        "/bin/ls": ["read", "stat", "exec"],\\n        "/sbin/apk": ["read", "stat", "exec"],\\n        "/bin/opkg": ["read", "stat", "exec"],\\n        "/sbin/logread": ["read", "stat"],\\n        "/etc/presence/*": ["read", "stat"],\\n        "/etc/init.d/presence_hostapd": ["read", "stat", "exec"],\\n        "/usr/sbin/batctl": ["read", "stat", "exec"],\\n        "/sys/module/batman_adv": ["read", "stat"],\\n        "/bin/cat": ["read", "stat", "exec"],\\n        "/bin/grep": ["read", "stat", "exec"],\\n        "/usr/bin/awk": ["read", "stat", "exec"],\\n        "/bin/df": ["read", "stat", "exec"],\\n        "/sbin/ip": ["read", "stat", "exec"],\\n        "/usr/sbin/ip": ["read", "stat", "exec"],\\n        "/bin/ubus": ["read", "stat", "exec"],\\n        "/bin/ping": ["read", "stat", "exec"],\\n        "/usr/bin/ping": ["read", "stat", "exec"],\\n        "/usr/bin/uptime": ["read", "stat", "exec"],\\n        "/usr/bin/killall": ["read", "stat", "exec"],\\n        "/bin/chmod": ["read", "stat", "exec"],\\n        "/bin/mkdir": ["read", "stat", "exec"],\\n        "/bin/rm": ["read", "stat", "exec"],\\n        "/proc/stat": ["read"],\\n        "/proc/meminfo": ["read"],\\n        "/proc/net/arp": ["read"],\\n        "/proc/net/dev": ["read"],\\n        "/etc/init.d/snort": ["read", "stat", "exec"],\\n        "/etc/init.d/banip": ["read", "stat", "exec"],\\n        "/proc/sys/net/netfilter/nf_conntrack_count": ["read"],\\n        "/proc/sys/net/netfilter/nf_conntrack_max": ["read"],\\n        "/usr/bin/tail": ["read", "stat", "exec"],\\n        "/usr/bin/wc": ["read", "stat", "exec"],\\n        "/tmp/dhcp.leases": ["read"],\\n        "/tmp/*": ["read", "stat"],\\n        "/sys/class/thermal/*": ["read"]\\n      }}\\n    }},\\n    "write": {{\\n      "ubus": {{\\n        "system": ["reboot", "upgrade"],\\n        "network.interface": ["up", "down", "reconnect"],\\n        "network": ["*"],\\n        "firewall": ["*"],\\n        "rc": ["*"],\\n        "service": ["*"],\\n        "uci": ["*"],\\n        "file": ["exec"],\\n        "hostapd.*": ["*"]\\n      }},\\n      "uci": ["*"],\\n      "file": {{\\n        "/bin/sh": ["exec"],\\n        "/bin/ash": ["exec"],\\n        "/usr/bin/id": ["exec"],\\n        "/sbin/apk": ["exec"],\\n        "/bin/opkg": ["exec"],\\n        "/tmp/*": ["read", "stat", "write"],\\n        "/etc/presence/*": ["read", "stat", "write"],\\n        "/etc/init.d/presence_hostapd": ["read", "stat", "write", "exec"]\\n      }}\\n    }}\\n  }}\\n}}' > "$ACL_FILE"
+printf '{{\\n  "homeassistant": {{\\n    "description": "Home Assistant Integration",\\n    "read": {{\\n      "ubus": {{\\n        "system": ["info", "board", "logread", "upgrade"],\\n        "log": ["read"],\\n        "network": ["*"],\\n        "network.*": ["*"],\\n        "iwinfo": ["*"],\\n        "file": ["*"],\\n        "firewall": ["*"],\\n        "rc": ["*"],\\n        "service": ["*"],\\n        "system": ["*"],\\n        "uci": ["*"],\\n        "session": ["*"],\\n        "hostapd.*": ["*"],\\n        "luci": ["*"],\\n        "luci-rpc": ["*"],\\n        "attendedsysupgrade": ["*"],\\n        "dsl": ["metrics"]\\n      }},\\n      "uci": ["*"],\\n      "file": {{\\n        "/etc/config/*": ["read", "stat"],\\n        "/etc/passwd": ["read"],\\n        "/etc/group": ["read"],\\n        "/etc/shadow": ["read"],\\n        "/etc/shells": ["read"],\\n        "/usr/bin/iwinfo": ["read", "stat", "exec"],\\n        "/usr/bin/etherwake": ["read", "stat", "exec"],\\n        "/usr/bin/wg": ["read", "stat", "exec"],\\n        "/usr/sbin/openvpn": ["read", "stat", "exec"],\\n        "/usr/bin/id": ["read", "stat", "exec"],\\n        "/bin/sh": ["read", "stat", "exec"],\\n        "/bin/ash": ["read", "stat", "exec"],\\n        "/bin/ls": ["read", "stat", "exec"],\\n        "/sbin/apk": ["read", "stat", "exec"],\\n        "/bin/opkg": ["read", "stat", "exec"],\\n        "/sbin/logread": ["read", "stat"],\\n        "/etc/presence/*": ["read", "stat"],\\n        "/etc/init.d/presence_hostapd": ["read", "stat", "exec"],\\n        "/usr/sbin/batctl": ["read", "stat", "exec"],\\n        "/sys/module/batman_adv": ["read", "stat"],\\n        "/bin/cat": ["read", "stat", "exec"],\\n        "/bin/grep": ["read", "stat", "exec"],\\n        "/usr/bin/awk": ["read", "stat", "exec"],\\n        "/bin/df": ["read", "stat", "exec"],\\n        "/sbin/ip": ["read", "stat", "exec"],\\n        "/usr/sbin/ip": ["read", "stat", "exec"],\\n        "/bin/ubus": ["read", "stat", "exec"],\\n        "/bin/ping": ["read", "stat", "exec"],\\n        "/usr/bin/ping": ["read", "stat", "exec"],\\n        "/usr/bin/uptime": ["read", "stat", "exec"],\\n        "/usr/bin/killall": ["read", "stat", "exec"],\\n        "/bin/chmod": ["read", "stat", "exec"],\\n        "/bin/mkdir": ["read", "stat", "exec"],\\n        "/bin/rm": ["read", "stat", "exec"],\\n        "/proc/stat": ["read"],\\n        "/proc/meminfo": ["read"],\\n        "/proc/net/arp": ["read"],\\n        "/proc/net/dev": ["read"],\\n        "/etc/init.d/snort": ["read", "stat", "exec"],\\n        "/etc/init.d/banip": ["read", "stat", "exec"],\\n        "/proc/sys/net/netfilter/nf_conntrack_count": ["read"],\\n        "/proc/sys/net/netfilter/nf_conntrack_max": ["read"],\\n        "/usr/bin/tail": ["read", "stat", "exec"],\\n        "/usr/bin/wc": ["read", "stat", "exec"],\\n        "/tmp/dhcp.leases": ["read"],\\n        "/tmp/*": ["read", "stat"],\\n        "/sys/class/thermal/*": ["read"]\\n      }}\\n    }},\\n    "write": {{\\n      "ubus": {{\\n        "system": ["reboot", "upgrade"],\\n        "network.interface": ["up", "down", "reconnect"],\\n        "network": ["*"],\\n        "firewall": ["*"],\\n        "rc": ["*"],\\n        "service": ["*"],\\n        "uci": ["*"],\\n        "file": ["exec"],\\n        "hostapd.*": ["*"]\\n      }},\\n      "uci": ["*"],\\n      "file": {{\\n        "/bin/sh": ["exec"],\\n        "/bin/ash": ["exec"],\\n        "/usr/bin/id": ["exec"],\\n        "/sbin/apk": ["exec"],\\n        "/bin/opkg": ["exec"],\\n        "/tmp/*": ["read", "stat", "write"],\\n        "/etc/presence/*": ["read", "stat", "write"],\\n        "/etc/init.d/presence_hostapd": ["read", "stat", "write", "exec"]\\n      }}\\n    }}\\n  }}\\n}}' > "$ACL_FILE"
 chmod 644 "$ACL_FILE"
 echo "LOG: TRACE: ACL created"
 
@@ -799,6 +799,22 @@ class OpenWrtPackages:
 
 
 @dataclass
+class DslMetrics:
+    """xDSL metrics reported by the optional OpenWrt ``dsl`` ubus object."""
+
+    available: bool = False
+    raw: dict[str, Any] = field(default_factory=dict)
+    state: str = ""
+    up: bool = False
+    uptime: int = 0
+    mode: str = ""
+    downstream_data_rate: int = 0
+    upstream_data_rate: int = 0
+    downstream_snr: float | None = None
+    upstream_snr: float | None = None
+
+
+@dataclass
 class OpenWrtData:
     """Aggregated data from an OpenWrt device."""
 
@@ -861,6 +877,7 @@ class OpenWrtData:
     batman_gateways: list[BatmanGateway] = field(default_factory=list)
     batman_translation_table: dict[str, str] = field(default_factory=dict)
     boot_time: datetime | None = None
+    dsl: DslMetrics = field(default_factory=DslMetrics)
 
 
 @dataclass
@@ -1013,6 +1030,50 @@ class OpenWrtClient(abc.ABC):
     async def check_packages(self) -> OpenWrtPackages:
         """Check installed packages."""
         raise NotImplementedError
+
+    async def get_dsl_metrics(self) -> DslMetrics:
+        """Get optional xDSL metrics from the router's ``dsl`` ubus object."""
+        try:
+            output = await self.execute_command("ubus call dsl metrics")
+            raw = json.loads(output)
+        except (json.JSONDecodeError, TypeError, ValueError) as err:
+            _LOGGER.debug("xDSL metrics are unavailable on %s: %s", self.host, err)
+            return DslMetrics()
+        except Exception as err:  # noqa: BLE001
+            _LOGGER.debug("Failed to query xDSL metrics on %s: %s", self.host, err)
+            return DslMetrics()
+
+        if not isinstance(raw, dict):
+            return DslMetrics()
+
+        downstream = raw.get("downstream")
+        upstream = raw.get("upstream")
+        return DslMetrics(
+            available=True,
+            raw=raw,
+            state=str(raw.get("state") or ""),
+            up=raw.get("up") is True,
+            uptime=int(raw.get("uptime") or 0),
+            mode=str(raw.get("mode") or ""),
+            downstream_data_rate=(
+                int(downstream.get("data_rate") or 0)
+                if isinstance(downstream, dict)
+                else 0
+            ),
+            upstream_data_rate=(
+                int(upstream.get("data_rate") or 0) if isinstance(upstream, dict) else 0
+            ),
+            downstream_snr=(
+                float(downstream["snr"])
+                if isinstance(downstream, dict) and downstream.get("snr") is not None
+                else None
+            ),
+            upstream_snr=(
+                float(upstream["snr"])
+                if isinstance(upstream, dict) and upstream.get("snr") is not None
+                else None
+            ),
+        )
 
     async def user_exists(self, username: str) -> bool:
         """Check if a system user exists on the device."""
@@ -2045,6 +2106,7 @@ class OpenWrtClient(abc.ABC):
             self.get_connected_devices(),
             self.get_local_macs(),
             self.get_local_ips(),
+            self.get_dsl_metrics(),
         ]
 
         # Add fast dynamic tasks (wireless, dhcp) to core_tasks
@@ -2074,6 +2136,7 @@ class OpenWrtClient(abc.ABC):
         )
         data.local_macs = get_val(core_results[3], data.local_macs, "local_macs")
         data.local_ips = get_val(core_results[4], data.local_ips, "local_ips")
+        data.dsl = get_val(core_results[5], data.dsl, "xDSL")
 
         core_dyn_offset = len(core_tasks)
         core_dyn_results = dict(
