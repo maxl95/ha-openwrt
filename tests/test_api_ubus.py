@@ -4,7 +4,11 @@ from unittest.mock import AsyncMock, MagicMock, call, patch
 
 import pytest
 
-from custom_components.openwrt.api.ubus import UbusClient, UbusError
+from custom_components.openwrt.api.ubus import (
+    UbusClient,
+    UbusError,
+    UbusPermissionError,
+)
 
 
 @pytest.mark.asyncio
@@ -1043,3 +1047,20 @@ async def test_ubus_wps_status_and_control(ubus_client: UbusClient):
         res = await ubus_client.trigger_wps_push("wlan0")
         assert res is True
         mock_call.assert_called_with("hostapd.wlan0", "wps_start")
+
+
+@pytest.mark.asyncio
+async def test_ubus_dsl_metrics_falls_back_for_legacy_acl(
+    ubus_client: UbusClient,
+) -> None:
+    """Legacy users without dsl ACL use the existing file.exec pathway."""
+    ubus_client._call = AsyncMock(side_effect=UbusPermissionError("denied"))
+    ubus_client.execute_command = AsyncMock(
+        return_value='{"state":"Showtime","up":true,"downstream":{"data_rate":100000000},"upstream":{"data_rate":40000000}}'
+    )
+
+    metrics = await ubus_client.get_dsl_metrics()
+
+    assert metrics.available is True
+    assert metrics.downstream_data_rate == 100000000
+    ubus_client.execute_command.assert_awaited_once_with("ubus call dsl metrics")
