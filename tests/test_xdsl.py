@@ -117,3 +117,11 @@ def test_dsl_sensors_expose_line_quality_and_error_counters() -> None:
     assert descriptions["dsl_near_end_fec"].value_fn(data) == 4490
     assert descriptions["dsl_far_end_error_seconds"].value_fn(data) == 135
     assert descriptions["dsl_far_end_code_violations"].value_fn(data) == 406
+
+
+def test_dsl_sensors_are_disabled_by_default() -> None:
+    """Optional xDSL sensors do not add entities until a user enables them."""
+    assert all(
+        description.entity_registry_enabled_default is False
+        for description in _get_dsl_sensors()
+    )

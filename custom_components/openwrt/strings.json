@@ -693,6 +693,87 @@
           "nlbwmon": "Top Bandwidth Hosts Sensor",
           "snort": "Snort IDS Sensor"
         }
+      },
+      "dsl_downstream_sync": {
+        "name": "xDSL Downstream Sync"
+      },
+      "dsl_upstream_sync": {
+        "name": "xDSL Upstream Sync"
+      },
+      "dsl_downstream_snr": {
+        "name": "xDSL Downstream SNR"
+      },
+      "dsl_upstream_snr": {
+        "name": "xDSL Upstream SNR"
+      },
+      "dsl_downstream_attainable": {
+        "name": "xDSL Downstream Attainable Rate"
+      },
+      "dsl_upstream_attainable": {
+        "name": "xDSL Upstream Attainable Rate"
+      },
+      "dsl_downstream_line_attenuation": {
+        "name": "xDSL Downstream Line Attenuation"
+      },
+      "dsl_upstream_line_attenuation": {
+        "name": "xDSL Upstream Line Attenuation"
+      },
+      "dsl_downstream_signal_attenuation": {
+        "name": "xDSL Downstream Signal Attenuation"
+      },
+      "dsl_upstream_signal_attenuation": {
+        "name": "xDSL Upstream Signal Attenuation"
+      },
+      "dsl_downstream_inp": {
+        "name": "xDSL Downstream INP"
+      },
+      "dsl_upstream_inp": {
+        "name": "xDSL Upstream INP"
+      },
+      "dsl_downstream_interleave_delay": {
+        "name": "xDSL Downstream Interleave Delay"
+      },
+      "dsl_upstream_interleave_delay": {
+        "name": "xDSL Upstream Interleave Delay"
+      },
+      "dsl_downstream_transmit_power": {
+        "name": "xDSL Downstream Transmit Power"
+      },
+      "dsl_upstream_transmit_power": {
+        "name": "xDSL Upstream Transmit Power"
+      },
+      "dsl_downstream_minimum_throughput": {
+        "name": "xDSL Downstream Minimum Throughput"
+      },
+      "dsl_upstream_minimum_throughput": {
+        "name": "xDSL Upstream Minimum Throughput"
+      },
+      "dsl_near_end_error_seconds": {
+        "name": "xDSL Near-End Error Seconds"
+      },
+      "dsl_far_end_error_seconds": {
+        "name": "xDSL Far-End Error Seconds"
+      },
+      "dsl_near_end_severely_errored_seconds": {
+        "name": "xDSL Near-End Severely Errored Seconds"
+      },
+      "dsl_far_end_severely_errored_seconds": {
+        "name": "xDSL Far-End Severely Errored Seconds"
+      },
+      "dsl_near_end_fec": {
+        "name": "xDSL Near-End FEC"
+      },
+      "dsl_far_end_fec": {
+        "name": "xDSL Far-End FEC"
+      },
+      "dsl_near_end_code_violations": {
+        "name": "xDSL Near-End Code Violations"
+      },
+      "dsl_far_end_code_violations": {
+        "name": "xDSL Far-End Code Violations"
+      },
+      "dsl_diagnostics": {
+        "name": "xDSL Diagnostics"
       }
     },
     "binary_sensor": {
