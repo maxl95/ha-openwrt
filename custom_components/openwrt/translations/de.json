@@ -749,31 +749,31 @@
         "name": "xDSL Upstream-Mindestdurchsatz"
       },
       "dsl_near_end_error_seconds": {
-        "name": "xDSL Fehlersekunden (nahes Ende)"
+        "name": "xDSL Fehlersekunden (ES, Teilnehmerseite)"
       },
       "dsl_far_end_error_seconds": {
-        "name": "xDSL Fehlersekunden (fernes Ende)"
+        "name": "xDSL Fehlersekunden (ES, Netzseite)"
       },
       "dsl_near_end_severely_errored_seconds": {
-        "name": "xDSL Schwerwiegende Fehlersekunden (nahes Ende)"
+        "name": "xDSL Schwer fehlerhafte Sekunden (SES, Teilnehmerseite)"
       },
       "dsl_far_end_severely_errored_seconds": {
-        "name": "xDSL Schwerwiegende Fehlersekunden (fernes Ende)"
+        "name": "xDSL Schwer fehlerhafte Sekunden (SES, Netzseite)"
       },
       "dsl_near_end_fec": {
-        "name": "xDSL FEC (nahes Ende)"
+        "name": "xDSL Korrigierbare Fehler (FEC, Teilnehmerseite)"
       },
       "dsl_far_end_fec": {
-        "name": "xDSL FEC (fernes Ende)"
+        "name": "xDSL Korrigierbare Fehler (FEC, Netzseite)"
       },
       "dsl_near_end_code_violations": {
-        "name": "xDSL Codeverletzungen (nahes Ende)"
+        "name": "xDSL Nicht korrigierbare Fehler (CV, Teilnehmerseite)"
       },
       "dsl_far_end_code_violations": {
-        "name": "xDSL Codeverletzungen (fernes Ende)"
+        "name": "xDSL Nicht korrigierbare Fehler (CV, Netzseite)"
       },
       "dsl_diagnostics": {
-        "name": "xDSL-Diagnose"
+        "name": "xDSL-Leitungsdiagnose"
       }
     },
     "binary_sensor": {
