@@ -470,3 +470,14 @@ async def test_provision_failed_step(hass) -> None:
         result = await flow.async_step_provision_failed({})
         mock_disp.assert_called_once()
         assert result["step_id"] == "permissions_ubus"
+
+
+def test_package_table_shows_xdsl_availability() -> None:
+    """The setup feature table displays a check for detected xDSL metrics."""
+    from custom_components.openwrt.api.base import OpenWrtPackages
+    from custom_components.openwrt.config_flow import _generate_package_table
+
+    table = _generate_package_table(OpenWrtPackages(), dsl_available=True)
+
+    assert "xDSL" in table
+    assert "✅" in table
