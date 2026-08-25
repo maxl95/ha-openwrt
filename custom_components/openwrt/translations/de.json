@@ -693,6 +693,87 @@
           "nlbwmon": "Top-Bandbreiten-Hosts-Sensor",
           "snort": "Snort IDS-Sensor"
         }
+      },
+      "dsl_downstream_sync": {
+        "name": "xDSL Downstream-Synchronisation"
+      },
+      "dsl_upstream_sync": {
+        "name": "xDSL Upstream-Synchronisation"
+      },
+      "dsl_downstream_snr": {
+        "name": "xDSL Downstream-Signal-Rausch-Abstand"
+      },
+      "dsl_upstream_snr": {
+        "name": "xDSL Upstream-Signal-Rausch-Abstand"
+      },
+      "dsl_downstream_attainable": {
+        "name": "xDSL Downstream erreichbare Datenrate"
+      },
+      "dsl_upstream_attainable": {
+        "name": "xDSL Upstream erreichbare Datenrate"
+      },
+      "dsl_downstream_line_attenuation": {
+        "name": "xDSL Downstream-Leitungsdämpfung"
+      },
+      "dsl_upstream_line_attenuation": {
+        "name": "xDSL Upstream-Leitungsdämpfung"
+      },
+      "dsl_downstream_signal_attenuation": {
+        "name": "xDSL Downstream-Signaldämpfung"
+      },
+      "dsl_upstream_signal_attenuation": {
+        "name": "xDSL Upstream-Signaldämpfung"
+      },
+      "dsl_downstream_inp": {
+        "name": "xDSL Downstream-INP"
+      },
+      "dsl_upstream_inp": {
+        "name": "xDSL Upstream-INP"
+      },
+      "dsl_downstream_interleave_delay": {
+        "name": "xDSL Downstream-Interleaving-Verzögerung"
+      },
+      "dsl_upstream_interleave_delay": {
+        "name": "xDSL Upstream-Interleaving-Verzögerung"
+      },
+      "dsl_downstream_transmit_power": {
+        "name": "xDSL Downstream-Sendeleistung"
+      },
+      "dsl_upstream_transmit_power": {
+        "name": "xDSL Upstream-Sendeleistung"
+      },
+      "dsl_downstream_minimum_throughput": {
+        "name": "xDSL Downstream-Mindestdurchsatz"
+      },
+      "dsl_upstream_minimum_throughput": {
+        "name": "xDSL Upstream-Mindestdurchsatz"
+      },
+      "dsl_near_end_error_seconds": {
+        "name": "xDSL Fehlersekunden (nahes Ende)"
+      },
+      "dsl_far_end_error_seconds": {
+        "name": "xDSL Fehlersekunden (fernes Ende)"
+      },
+      "dsl_near_end_severely_errored_seconds": {
+        "name": "xDSL Schwerwiegende Fehlersekunden (nahes Ende)"
+      },
+      "dsl_far_end_severely_errored_seconds": {
+        "name": "xDSL Schwerwiegende Fehlersekunden (fernes Ende)"
+      },
+      "dsl_near_end_fec": {
+        "name": "xDSL FEC (nahes Ende)"
+      },
+      "dsl_far_end_fec": {
+        "name": "xDSL FEC (fernes Ende)"
+      },
+      "dsl_near_end_code_violations": {
+        "name": "xDSL Codeverletzungen (nahes Ende)"
+      },
+      "dsl_far_end_code_violations": {
+        "name": "xDSL Codeverletzungen (fernes Ende)"
+      },
+      "dsl_diagnostics": {
+        "name": "xDSL-Diagnose"
       }
     },
     "binary_sensor": {

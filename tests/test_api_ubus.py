@@ -7,6 +7,28 @@ import pytest
 from custom_components.openwrt.api.ubus import UbusClient, UbusError
 
 
+@pytest.mark.asyncio
+async def test_ubus_get_dsl_metrics_uses_native_dsl_metrics_call(
+    ubus_client: UbusClient,
+) -> None:
+    """Direct ubus transport retrieves optional DSL metrics without a shell."""
+    ubus_client._call = AsyncMock(
+        return_value={
+            "state": "Showtime with TC-Layer sync",
+            "up": True,
+            "downstream": {"data_rate": 116_790_000, "snr": 12.5},
+            "upstream": {"data_rate": 42_460_000, "snr": 6.7},
+        }
+    )
+
+    metrics = await ubus_client.get_dsl_metrics()
+
+    ubus_client._call.assert_awaited_once_with("dsl", "metrics")
+    assert metrics.available is True
+    assert metrics.downstream_data_rate == 116_790_000
+    assert metrics.upstream_snr == 6.7
+
+
 @pytest.fixture
 def ubus_client() -> UbusClient:
     """Fixture for Ubus client."""
