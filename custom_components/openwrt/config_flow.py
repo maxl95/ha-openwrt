@@ -234,6 +234,7 @@ def _generate_package_table(
     packages: Any,
     connection_type: str | None = None,
     translations: dict[str, str] | None = None,
+    dsl_available: bool | None = None,
 ) -> str:
     """Generate markdown table for installed packages."""
 
@@ -289,7 +290,8 @@ def _generate_package_table(
         f"| **coreutils-stty** | {to_icon(packages.stty)} | {get_missing(packages.stty, 'GPS Modem Tracking (stty)', 'stty')} |\n"
         f"| **coreutils-timeout** | {to_icon(packages.timeout)} | {get_missing(packages.timeout, 'GPS Modem Tracking (timeout)', 'timeout')} |\n"
         f"| **banip** | {to_icon(packages.ban_ip)} | {get_missing(packages.ban_ip, 'banIP Service Control & Sensors', 'ban_ip')} |\n"
-        f"| **snort** | {to_icon(packages.snort)} | {get_missing(packages.snort, 'Snort IDS Alerts Sensor', 'snort')} |"
+        f"| **snort** | {to_icon(packages.snort)} | {get_missing(packages.snort, 'Snort IDS Alerts Sensor', 'snort')} |\n"
+        f"| **xDSL (`dsl` ubus)** | {to_icon(dsl_available)} | {'-' if dsl_available else 'xDSL metrics unavailable'} |"
     )
 
 
@@ -347,6 +349,7 @@ class OpenWrtConfigFlow(ConfigFlow, domain=DOMAIN):
         self._discovered_name: str | None = None
         self._permissions: Any = None
         self._packages: Any = None
+        self._dsl_available: bool | None = None
         self._homeassistant_user_exists: bool = False
         self._provision_error: str | None = None
         self._generated_password: str | None = None
@@ -1120,6 +1123,8 @@ class OpenWrtConfigFlow(ConfigFlow, domain=DOMAIN):
             self._permissions = await client.check_permissions()
         with contextlib.suppress(Exception):
             self._packages = await client.check_packages()
+        with contextlib.suppress(Exception):
+            self._dsl_available = (await client.get_dsl_metrics()).available
 
         # Specific check for restricted Ubus (like Xiaomi firmwares)
         if data.get(CONF_CONNECTION_TYPE) == CONNECTION_TYPE_UBUS:
@@ -1878,6 +1883,7 @@ class OpenWrtConfigFlow(ConfigFlow, domain=DOMAIN):
             self._packages,
             self._data.get(CONF_CONNECTION_TYPE),
             translations=feature_translations,
+            dsl_available=self._dsl_available,
         )
 
         # Build dynamic schema for feature toggles

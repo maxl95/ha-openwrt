@@ -9,6 +9,7 @@ from urllib.parse import urlsplit
 import aiohttp
 
 from ..base import (
+    DslMetrics,
     OpenWrtClient,
 )
 from .devices import UbusDevicesMixin
@@ -74,6 +75,38 @@ class UbusClient(
         self._endpoint_resolved: bool = False
 
         self._semaphore = asyncio.Semaphore(5)
+
+    async def get_dsl_metrics(self) -> DslMetrics:
+        """Get optional xDSL metrics through the native ubus API."""
+        try:
+            raw = await self._call("dsl", "metrics")
+        except Exception as err:  # noqa: BLE001
+            _LOGGER.debug("xDSL metrics are unavailable on %s: %s", self.host, err)
+            return DslMetrics()
+        if not isinstance(raw, dict):
+            return DslMetrics()
+        downstream = raw.get("downstream")
+        upstream = raw.get("upstream")
+        return DslMetrics(
+            available=True,
+            raw=raw,
+            state=str(raw.get("state") or ""),
+            up=raw.get("up") is True,
+            uptime=int(raw.get("uptime") or 0),
+            mode=str(raw.get("mode") or ""),
+            downstream_data_rate=int(downstream.get("data_rate") or 0)
+            if isinstance(downstream, dict)
+            else 0,
+            upstream_data_rate=int(upstream.get("data_rate") or 0)
+            if isinstance(upstream, dict)
+            else 0,
+            downstream_snr=float(downstream["snr"])
+            if isinstance(downstream, dict) and downstream.get("snr") is not None
+            else None,
+            upstream_snr=float(upstream["snr"])
+            if isinstance(upstream, dict) and upstream.get("snr") is not None
+            else None,
+        )
 
     @property
     def _base_url(self) -> str:
